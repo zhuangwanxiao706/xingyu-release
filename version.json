@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "packageName": "cn.xingyu.ledger",
-  "versionCode": 5,
-  "versionName": "0.2.2-test",
-  "releasedAt": "2026-11-18T10:32:00+08:00",
+  "versionCode": 6,
+  "versionName": "0.2.3-test",
+  "releasedAt": "2026-11-18T11:51:18+08:00",
   "minSdk": 26,
-  "apkUrl": "https://zhuangwanxiao706.github.io/xingyu-release/xingyu-ledger-0.2.2-test.apk",
-  "apkSize": 112184,
-  "sha256": "a4fe0834a94a20f8edf854fdde068c7b404c226bd82b5550d41a3865bfe2755d",
-  "releaseNotes": "新增应用内检查更新与下载安装：设置页可手动检查、可选每 24 小时自动检查、仅 Wi-Fi 自动下载。下载完成后核对大小、SHA-256、包名、内部版本号、最低系统版本与签名，再交给系统安装器。首次从 0.2.1 升级需手动覆盖安装并先导出账本。"
+  "apkUrl": "https://zhuangwanxiao706.github.io/xingyu-release/xingyu-ledger-0.2.3-test.apk",
+  "apkSize": 116341,
+  "sha256": "b5bea02456523c991760a7dd53454e874c23bd09c34abe5a0ee1ca6e301aa91f",
+  "releaseNotes": "新增账单中心，可按日期、描述、分类和资金账户组合筛选。月报与账户余额页可直接查看对应明细。打开新版一次后，支持快捷操作的安卓桌面可长按图标选择「记一笔」。"
 }
