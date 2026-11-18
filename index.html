@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>星屿记账 · 测试版下载</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 20px 56px;
+    font: 16px/1.6 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: #1c2330; background: #f5f7fa;
+  }
+  main { max-width: 520px; margin: 0 auto; }
+  h1 { margin: 0 0 4px; font-size: 22px; letter-spacing: .5px; }
+  .sub { margin: 0 0 24px; color: #6b7686; font-size: 14px; }
+  .card {
+    background: #fff; border: 1px solid #e3e8ef; border-radius: 14px;
+    padding: 20px; margin-bottom: 16px;
+  }
+  .tag {
+    display: inline-block; padding: 2px 9px; border-radius: 999px;
+    background: #eaf3ff; color: #1f6feb; font-size: 12px; font-weight: 600;
+  }
+  .version { margin: 12px 0 2px; font-size: 26px; font-weight: 700; }
+  .meta { color: #6b7686; font-size: 13px; }
+  .notes { margin: 16px 0 0; padding: 0; list-style: none; font-size: 14px; color: #3a4453; }
+  .notes li { position: relative; padding-left: 16px; margin-bottom: 8px; }
+  .notes li::before {
+    content: ""; position: absolute; left: 0; top: .62em;
+    width: 5px; height: 5px; border-radius: 50%; background: #9bb0c9;
+  }
+  .download {
+    display: block; margin-top: 20px; padding: 14px; text-align: center;
+    background: #1f6feb; color: #fff; text-decoration: none;
+    border-radius: 10px; font-weight: 600;
+  }
+  .download:active { background: #1a5fcc; }
+  .download[aria-disabled="true"] { background: #b6c2d1; pointer-events: none; }
+  .hash {
+    margin-top: 14px; font: 12px/1.5 ui-monospace, Consolas, monospace;
+    color: #8a94a4; word-break: break-all;
+  }
+  h2 { margin: 0 0 10px; font-size: 15px; }
+  ol { margin: 0; padding-left: 20px; font-size: 14px; color: #3a4453; }
+  ol li { margin-bottom: 7px; }
+  .warn { color: #9a5b00; background: #fff7e8; border-color: #f2e2c4; }
+  footer { text-align: center; color: #9aa4b2; font-size: 12px; margin-top: 28px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>星屿记账</h1>
+  <p class="sub">安卓测试版 · 仅本人测试使用，非正式发布</p>
+
+  <section class="card">
+    <span class="tag" id="channel">正在读取版本…</span>
+    <div class="version" id="version">—</div>
+    <div class="meta" id="meta"></div>
+    <ul class="notes" id="notes"></ul>
+    <a class="download" id="download" href="version.json" aria-disabled="true">获取下载地址…</a>
+    <div class="hash" id="hash"></div>
+  </section>
+
+  <section class="card warn">
+    <h2>首次从 0.2.1 升级</h2>
+    <ol>
+      <li>先打开旧版 → 设置 → 导出账本（JSON 备份），存到手机文件里。</li>
+      <li>回到本页下载 APK，点开安装。<strong>不要先卸载旧版</strong>，直接覆盖安装才能保留数据。</li>
+      <li>系统提示“未知来源”时，允许浏览器安装应用。</li>
+      <li>装好后打开 → 设置 → 应用更新 → 点“检查更新”，确认显示已是最新。</li>
+    </ol>
+  </section>
+
+  <footer>由 GitHub Pages 提供，仅托管版本说明与安装包</footer>
+</main>
+<script>
+  const form = new Intl.NumberFormat('zh-CN');
+  fetch('version.json', { cache: 'no-cache' })
+    .then((response) => {
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      return response.json();
+    })
+    .then((release) => {
+      document.getElementById('channel').textContent = '最新版本';
+      document.getElementById('version').textContent = release.versionName;
+      document.getElementById('meta').textContent =
+        '内部版本 ' + release.versionCode +
+        ' · ' + form.format(release.apkSize) + ' 字节' +
+        ' · ' + String(release.releasedAt).replace('T', ' ').slice(0, 16);
+      document.getElementById('notes').innerHTML = String(release.releaseNotes || '')
+        .split(/[。；\n]/).map((line) => line.trim()).filter(Boolean)
+        .map((line) => '<li>' + line.replace(/[<>&]/g, (c) => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])) + '</li>')
+        .join('');
+      const link = document.getElementById('download');
+      link.href = release.apkUrl;
+      link.textContent = '下载 ' + release.versionName + '（' + Math.round(release.apkSize / 1024) + ' KB）';
+      link.setAttribute('aria-disabled', 'false');
+      document.getElementById('hash').textContent = 'SHA-256 ' + release.sha256;
+    })
+    .catch((error) => {
+      document.getElementById('channel').textContent = '版本信息读取失败';
+      document.getElementById('meta').textContent = error.message;
+    });
+</script>
+</body>
+</html>
